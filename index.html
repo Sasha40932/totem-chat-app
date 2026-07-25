@@ -3,248 +3,52 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link rel="manifest" href="manifest.json">
   <title>TotemChat</title>
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
-    body {
-      background: #0a0a0a;
-      color: #ffffff;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      overflow: hidden;
-    }
-
-    /* Шапка */
-    .header {
-      background: #1f2c33;
-      padding: 12px 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-shrink: 0;
-      border-bottom: 1px solid #2a3a42;
-    }
-    .header h1 {
-      font-size: 18px;
-      font-weight: 600;
-      color: #ffffff;
-      letter-spacing: 0.3px;
-    }
-    .header .status {
-      font-size: 13px;
-      color: #7c8b93;
-    }
-
-    /* Основная область */
-    .main-area {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      background: #0a0a0a;
-    }
-
-    /* Окно сообщений */
-    #messages {
-      flex: 1;
-      overflow-y: auto;
-      padding: 12px 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    /* Сообщения (пузыри) */
-    .msg {
-      max-width: 80%;
-      padding: 8px 12px;
-      border-radius: 12px;
-      margin: 2px 0;
-      word-break: break-word;
-      font-size: 14px;
-      line-height: 1.4;
-      animation: fadeIn 0.2s ease;
-    }
-    .msg.system {
-      background: #1f2c33;
-      color: #8ba3b0;
-      align-self: center;
-      font-size: 12px;
-      padding: 4px 12px;
-      border-radius: 20px;
-      margin: 8px 0;
-      max-width: 90%;
-    }
-    .msg.me {
-      background: #2b5278;
-      color: #ffffff;
-      align-self: flex-end;
-      border-bottom-right-radius: 4px;
-    }
-    .msg.other {
-      background: #1f2c33;
-      color: #ffffff;
-      align-self: flex-start;
-      border-bottom-left-radius: 4px;
-    }
-
-    /* Поле ввода */
-    .input-area {
-      display: flex;
-      gap: 8px;
-      padding: 10px 16px;
-      background: #1f2c33;
-      border-top: 1px solid #2a3a42;
-      flex-shrink: 0;
-    }
-    .input-area input {
-      flex: 1;
-      padding: 10px 14px;
-      border-radius: 20px;
-      border: none;
-      background: #2a3a42;
-      color: #ffffff;
-      font-size: 15px;
-      outline: none;
-    }
-    .input-area input::placeholder {
-      color: #7c8b93;
-    }
-    .input-area button {
-      padding: 10px 18px;
-      border-radius: 20px;
-      border: none;
-      background: #2b5278;
-      color: #ffffff;
-      font-weight: bold;
-      font-size: 15px;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-    .input-area button:active {
-      background: #1f3a57;
-    }
-
-    /* Нижняя панель (как в ТГ) */
-    .bottom-nav {
-      display: flex;
-      background: #1f2c33;
-      border-top: 1px solid #2a3a42;
-      flex-shrink: 0;
-    }
-    .bottom-nav button {
-      flex: 1;
-      padding: 12px 0;
-      background: transparent;
-      border: none;
-      color: #7c8b93;
-      font-size: 14px;
-      font-weight: 500;
-      transition: 0.2s;
-      cursor: pointer;
-    }
-    .bottom-nav button.active {
-      color: #2b5278;
-      border-bottom: 2px solid #2b5278;
-    }
-    .bottom-nav button:active {
-      background: #2a3a42;
-    }
-
-    /* Контакты и профиль */
-    .tab-content {
-      display: none;
-      flex: 1;
-      flex-direction: column;
-      padding: 12px 16px;
-      overflow-y: auto;
-    }
-    .tab-content.active {
-      display: flex;
-    }
-    .contact-item {
-      padding: 10px 0;
-      border-bottom: 1px solid #1f2c33;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .contact-item span {
-      color: #ffffff;
-    }
-    .contact-item button {
-      background: #2a3a42;
-      border: none;
-      color: #7c8b93;
-      padding: 4px 12px;
-      border-radius: 12px;
-      font-size: 12px;
-      cursor: pointer;
-    }
-    .contact-item button:active {
-      background: #3a4a52;
-    }
-    .add-area {
-      display: flex;
-      gap: 8px;
-      margin-top: 12px;
-    }
-    .add-area input {
-      flex: 1;
-      padding: 10px 14px;
-      border-radius: 20px;
-      border: none;
-      background: #1f2c33;
-      color: #ffffff;
-      font-size: 14px;
-      outline: none;
-    }
-    .add-area button {
-      padding: 10px 16px;
-      border-radius: 20px;
-      border: none;
-      background: #2b5278;
-      color: #ffffff;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .profile-container {
-      text-align: center;
-      padding: 20px 0;
-    }
-    .profile-container p {
-      color: #7c8b93;
-      font-size: 14px;
-    }
-    #peer-id {
-      background: #1f2c33;
-      padding: 12px;
-      border-radius: 12px;
-      word-break: break-all;
-      font-size: 14px;
-      margin-top: 8px;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(6px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    body { background:#0a0a0a; color:#ffffff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; display:flex; flex-direction:column; height:100vh; overflow:hidden; }
+    .header { background:#1f2c33; padding:12px 16px; display:flex; align-items:center; justify-content:space-between; flex-shrink:0; border-bottom:1px solid #2a3a42; }
+    .header h1 { font-size:18px; font-weight:600; color:#ffffff; letter-spacing:0.3px; }
+    .header .status { font-size:13px; color:#7c8b93; }
+    .main-area { flex:1; display:flex; flex-direction:column; overflow:hidden; background:#0a0a0a; }
+    #messages { flex:1; overflow-y:auto; padding:12px 16px; display:flex; flex-direction:column; gap:4px; }
+    .msg { max-width:80%; padding:8px 12px; border-radius:12px; margin:2px 0; word-break:break-word; font-size:14px; line-height:1.4; animation:fadeIn 0.2s ease; }
+    .msg.system { background:#1f2c33; color:#8ba3b0; align-self:center; font-size:12px; padding:4px 12px; border-radius:20px; margin:8px 0; max-width:90%; }
+    .msg.me { background:#2b5278; color:#ffffff; align-self:flex-end; border-bottom-right-radius:4px; }
+    .msg.other { background:#1f2c33; color:#ffffff; align-self:flex-start; border-bottom-left-radius:4px; }
+    .input-area { display:flex; gap:8px; padding:10px 16px; background:#1f2c33; border-top:1px solid #2a3a42; flex-shrink:0; }
+    .input-area input { flex:1; padding:10px 14px; border-radius:20px; border:none; background:#2a3a42; color:#ffffff; font-size:15px; outline:none; }
+    .input-area input::placeholder { color:#7c8b93; }
+    .input-area button { padding:10px 18px; border-radius:20px; border:none; background:#2b5278; color:#ffffff; font-weight:bold; font-size:15px; cursor:pointer; transition:0.2s; }
+    .input-area button:active { background:#1f3a57; }
+    .bottom-nav { display:flex; background:#1f2c33; border-top:1px solid #2a3a42; flex-shrink:0; }
+    .bottom-nav button { flex:1; padding:12px 0; background:transparent; border:none; color:#7c8b93; font-size:14px; font-weight:500; transition:0.2s; cursor:pointer; }
+    .bottom-nav button.active { color:#2b5278; border-bottom:2px solid #2b5278; }
+    .bottom-nav button:active { background:#2a3a42; }
+    .tab-content { display:none; flex:1; flex-direction:column; padding:12px 16px; overflow-y:auto; }
+    .tab-content.active { display:flex; }
+    .contact-item { padding:10px 0; border-bottom:1px solid #1f2c33; display:flex; justify-content:space-between; align-items:center; }
+    .contact-item span { color:#ffffff; }
+    .contact-item button { background:#2a3a42; border:none; color:#7c8b93; padding:4px 12px; border-radius:12px; font-size:12px; cursor:pointer; }
+    .contact-item button:active { background:#3a4a52; }
+    .add-area { display:flex; gap:8px; margin-top:12px; }
+    .add-area input { flex:1; padding:10px 14px; border-radius:20px; border:none; background:#1f2c33; color:#ffffff; font-size:14px; outline:none; }
+    .add-area button { padding:10px 16px; border-radius:20px; border:none; background:#2b5278; color:#ffffff; font-weight:bold; cursor:pointer; }
+    .profile-container { text-align:center; padding:20px 0; }
+    .profile-container p { color:#7c8b93; font-size:14px; }
+    #peer-id { background:#1f2c33; padding:12px; border-radius:12px; word-break:break-all; font-size:14px; margin-top:8px; }
+    @keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
   </style>
 </head>
 <body>
 
-<!-- Шапка -->
 <div class="header">
   <h1>💬 TotemChat</h1>
   <span class="status" id="status">Подключение...</span>
 </div>
 
-<!-- Основная область -->
 <div class="main-area">
-
-  <!-- Вкладка чата -->
   <div id="tab-chat" class="tab-content active" style="display:flex;">
     <div id="messages"></div>
     <div class="input-area">
@@ -253,7 +57,6 @@
     </div>
   </div>
 
-  <!-- Вкладка контактов -->
   <div id="tab-contacts" class="tab-content">
     <div id="contact-list"></div>
     <div class="add-area">
@@ -262,17 +65,14 @@
     </div>
   </div>
 
-  <!-- Вкладка профиля -->
   <div id="tab-profile" class="tab-content">
     <div class="profile-container">
       <p><strong>PeerID</strong></p>
       <div id="peer-id">загрузка...</div>
     </div>
   </div>
-
 </div>
 
-<!-- Нижняя навигация -->
 <div class="bottom-nav">
   <button id="btn-chat" class="active" onclick="showTab('chat')">Чат</button>
   <button id="btn-contacts" onclick="showTab('contacts')">Контакты</button>
@@ -280,20 +80,16 @@
 </div>
 
 <script>
-  // ======= НАСТРОЙКИ =======
   const SERVER_URL = 'https://totem-chat-79-vbe79tsxyx71.sasha40932.deno.net';
   const MY_ID = 'user_' + Math.random().toString(36).substring(2,8);
 
-  // ======= ЭЛЕМЕНТЫ =======
   const messagesEl = document.getElementById('messages');
   const input = document.getElementById('input');
   const statusEl = document.getElementById('status');
   const peerIdEl = document.getElementById('peer-id');
 
-  // ======= ГЕНЕРАЦИЯ ID =======
   peerIdEl.textContent = MY_ID;
 
-  // ======= КОНТАКТЫ =======
   function getContacts() {
     return JSON.parse(localStorage.getItem('contacts')) || [];
   }
@@ -329,7 +125,6 @@
     renderContacts();
   };
 
-  // ======= ОТПРАВКА =======
   window.send = async function() {
     const text = input.value.trim();
     if (!text) return;
@@ -347,7 +142,6 @@
     }
   };
 
-  // ======= ПОЛУЧЕНИЕ =======
   async function receive() {
     try {
       const res = await fetch(SERVER_URL + '/receive?peerId=' + MY_ID);
@@ -360,7 +154,6 @@
     }
   }
 
-  // ======= ВЫВОД СООБЩЕНИЯ =======
   function addMessage(text, type) {
     const div = document.createElement('div');
     div.className = 'msg ' + type;
@@ -369,7 +162,6 @@
     messagesEl.scrollTop = messagesEl.scrollHeight;
   }
 
-  // ======= ВКЛАДКИ =======
   window.showTab = function(tab) {
     document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
     document.getElementById('tab-'+tab).classList.add('active');
@@ -378,17 +170,15 @@
     if (tab === 'contacts') renderContacts();
   };
 
-  // ======= ОПРОС =======
   setInterval(receive, 3000);
   receive();
 
-  // ======= ВВОД =======
   input.addEventListener('keypress', (e) => { if (e.key === 'Enter') window.send(); });
 
-  // ======= СТАРТ =======
   addMessage('Добро пожаловать в TotemChat', 'system');
   addMessage('Твой PeerID: ' + MY_ID, 'system');
   statusEl.textContent = '🔄 Подключено';
 </script>
 </body>
-        </html>
+</html>
+

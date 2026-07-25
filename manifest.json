@@ -1,0 +1,16 @@
+{
+  "name": "TotemChat",
+  "short_name": "TotemChat",
+  "description": "Глобальный мессенджер с тотемом",
+  "start_url": "https://sashad0932.github.io/totem-chat-app/",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#1f2c33",
+  "icons": [
+    {
+      "src": "https://sashad0932.github.io/totem-chat-app/IMG_20260725_19285-3.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

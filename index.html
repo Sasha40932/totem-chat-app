@@ -7,38 +7,229 @@
   <title>TotemChat</title>
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
-    body { background:#0a0a0a; color:#ffffff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; display:flex; flex-direction:column; height:100vh; overflow:hidden; }
-    .header { background:#1f2c33; padding:12px 16px; display:flex; align-items:center; justify-content:space-between; flex-shrink:0; border-bottom:1px solid #2a3a42; }
-    .header h1 { font-size:18px; font-weight:600; color:#ffffff; letter-spacing:0.3px; }
-    .header .status { font-size:13px; color:#7c8b93; }
-    .main-area { flex:1; display:flex; flex-direction:column; overflow:hidden; background:#0a0a0a; }
-    #messages { flex:1; overflow-y:auto; padding:12px 16px; display:flex; flex-direction:column; gap:4px; }
-    .msg { max-width:80%; padding:8px 12px; border-radius:12px; margin:2px 0; word-break:break-word; font-size:14px; line-height:1.4; animation:fadeIn 0.2s ease; }
-    .msg.system { background:#1f2c33; color:#8ba3b0; align-self:center; font-size:12px; padding:4px 12px; border-radius:20px; margin:8px 0; max-width:90%; }
-    .msg.me { background:#2b5278; color:#ffffff; align-self:flex-end; border-bottom-right-radius:4px; }
-    .msg.other { background:#1f2c33; color:#ffffff; align-self:flex-start; border-bottom-left-radius:4px; }
-    .input-area { display:flex; gap:8px; padding:10px 16px; background:#1f2c33; border-top:1px solid #2a3a42; flex-shrink:0; }
-    .input-area input { flex:1; padding:10px 14px; border-radius:20px; border:none; background:#2a3a42; color:#ffffff; font-size:15px; outline:none; }
-    .input-area input::placeholder { color:#7c8b93; }
-    .input-area button { padding:10px 18px; border-radius:20px; border:none; background:#2b5278; color:#ffffff; font-weight:bold; font-size:15px; cursor:pointer; transition:0.2s; }
-    .input-area button:active { background:#1f3a57; }
-    .bottom-nav { display:flex; background:#1f2c33; border-top:1px solid #2a3a42; flex-shrink:0; }
-    .bottom-nav button { flex:1; padding:12px 0; background:transparent; border:none; color:#7c8b93; font-size:14px; font-weight:500; transition:0.2s; cursor:pointer; }
-    .bottom-nav button.active { color:#2b5278; border-bottom:2px solid #2b5278; }
-    .bottom-nav button:active { background:#2a3a42; }
-    .tab-content { display:none; flex:1; flex-direction:column; padding:12px 16px; overflow-y:auto; }
-    .tab-content.active { display:flex; }
-    .contact-item { padding:10px 0; border-bottom:1px solid #1f2c33; display:flex; justify-content:space-between; align-items:center; }
-    .contact-item span { color:#ffffff; }
-    .contact-item button { background:#2a3a42; border:none; color:#7c8b93; padding:4px 12px; border-radius:12px; font-size:12px; cursor:pointer; }
-    .contact-item button:active { background:#3a4a52; }
-    .add-area { display:flex; gap:8px; margin-top:12px; }
-    .add-area input { flex:1; padding:10px 14px; border-radius:20px; border:none; background:#1f2c33; color:#ffffff; font-size:14px; outline:none; }
-    .add-area button { padding:10px 16px; border-radius:20px; border:none; background:#2b5278; color:#ffffff; font-weight:bold; cursor:pointer; }
-    .profile-container { text-align:center; padding:20px 0; }
-    .profile-container p { color:#7c8b93; font-size:14px; }
-    #peer-id { background:#1f2c33; padding:12px; border-radius:12px; word-break:break-all; font-size:14px; margin-top:8px; }
-    @keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+    body {
+      background: #f0f2f5;
+      color: #1c1c1c;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Шапка */
+    .header {
+      background: #ffffff;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .header h1 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #1c1c1c;
+    }
+    .header .status {
+      font-size: 13px;
+      color: #6c7a89;
+    }
+
+    /* Верхняя навигация (кнопки сверху) */
+    .top-nav {
+      display: flex;
+      background: #ffffff;
+      border-bottom: 1px solid #e0e0e0;
+      flex-shrink: 0;
+    }
+    .top-nav button {
+      flex: 1;
+      padding: 12px 0;
+      background: transparent;
+      border: none;
+      color: #6c7a89;
+      font-size: 14px;
+      font-weight: 500;
+      transition: 0.2s;
+      cursor: pointer;
+    }
+    .top-nav button.active {
+      color: #0088cc;
+      border-bottom: 2px solid #0088cc;
+    }
+    .top-nav button:active {
+      background: #e6e6e6;
+    }
+
+    /* Основная область */
+    .main-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background: #f0f2f5;
+    }
+
+    /* Сообщения */
+    #messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .msg {
+      max-width: 80%;
+      padding: 8px 12px;
+      border-radius: 12px;
+      margin: 2px 0;
+      word-break: break-word;
+      font-size: 14px;
+      line-height: 1.4;
+      animation: fadeIn 0.2s ease;
+    }
+    .msg.system {
+      background: #e8e8e8;
+      color: #6c7a89;
+      align-self: center;
+      font-size: 12px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin: 8px 0;
+      max-width: 90%;
+    }
+    .msg.me {
+      background: #0088cc;
+      color: #ffffff;
+      align-self: flex-end;
+      border-bottom-right-radius: 4px;
+    }
+    .msg.other {
+      background: #ffffff;
+      color: #1c1c1c;
+      align-self: flex-start;
+      border-bottom-left-radius: 4px;
+    }
+
+    /* Поле ввода */
+    .input-area {
+      display: flex;
+      gap: 8px;
+      padding: 10px 16px;
+      background: #ffffff;
+      border-top: 1px solid #e0e0e0;
+      flex-shrink: 0;
+    }
+    .input-area input {
+      flex: 1;
+      padding: 10px 14px;
+      border-radius: 20px;
+      border: 1px solid #d0d0d0;
+      background: #f5f5f5;
+      color: #1c1c1c;
+      font-size: 15px;
+      outline: none;
+    }
+    .input-area input::placeholder {
+      color: #9a9a9a;
+    }
+    .input-area button {
+      padding: 10px 18px;
+      border-radius: 20px;
+      border: none;
+      background: #0088cc;
+      color: #ffffff;
+      font-weight: bold;
+      font-size: 15px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .input-area button:active {
+      background: #006699;
+    }
+
+    /* Вкладки (контакты, профиль) */
+    .tab-content {
+      display: none;
+      flex: 1;
+      flex-direction: column;
+      padding: 12px 16px;
+      overflow-y: auto;
+    }
+    .tab-content.active {
+      display: flex;
+    }
+    .contact-item {
+      padding: 10px 0;
+      border-bottom: 1px solid #e0e0e0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .contact-item span {
+      color: #1c1c1c;
+    }
+    .contact-item button {
+      background: #e8e8e8;
+      border: none;
+      color: #6c7a89;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .contact-item button:active {
+      background: #d0d0d0;
+    }
+    .add-area {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .add-area input {
+      flex: 1;
+      padding: 10px 14px;
+      border-radius: 20px;
+      border: 1px solid #d0d0d0;
+      background: #ffffff;
+      color: #1c1c1c;
+      font-size: 14px;
+      outline: none;
+    }
+    .add-area button {
+      padding: 10px 16px;
+      border-radius: 20px;
+      border: none;
+      background: #0088cc;
+      color: #ffffff;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .profile-container {
+      text-align: center;
+      padding: 20px 0;
+    }
+    .profile-container p {
+      color: #6c7a89;
+      font-size: 14px;
+    }
+    #peer-id {
+      background: #ffffff;
+      padding: 12px;
+      border-radius: 12px;
+      word-break: break-all;
+      font-size: 14px;
+      margin-top: 8px;
+      border: 1px solid #e0e0e0;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
   </style>
 </head>
 <body>
@@ -46,6 +237,13 @@
 <div class="header">
   <h1>💬 TotemChat</h1>
   <span class="status" id="status">Подключение...</span>
+</div>
+
+<!-- Верхняя навигация (кнопки сверху) -->
+<div class="top-nav">
+  <button id="btn-chat" class="active" onclick="showTab('chat')">Чат</button>
+  <button id="btn-contacts" onclick="showTab('contacts')">Контакты</button>
+  <button id="btn-profile" onclick="showTab('profile')">Профиль</button>
 </div>
 
 <div class="main-area">
@@ -71,12 +269,6 @@
       <div id="peer-id">загрузка...</div>
     </div>
   </div>
-</div>
-
-<div class="bottom-nav">
-  <button id="btn-chat" class="active" onclick="showTab('chat')">Чат</button>
-  <button id="btn-contacts" onclick="showTab('contacts')">Контакты</button>
-  <button id="btn-profile" onclick="showTab('profile')">Профиль</button>
 </div>
 
 <script>
@@ -165,7 +357,7 @@
   window.showTab = function(tab) {
     document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
     document.getElementById('tab-'+tab).classList.add('active');
-    document.querySelectorAll('.bottom-nav button').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.top-nav button').forEach(b => b.classList.remove('active'));
     document.getElementById('btn-'+tab).classList.add('active');
     if (tab === 'contacts') renderContacts();
   };
